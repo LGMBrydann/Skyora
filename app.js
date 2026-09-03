@@ -563,4 +563,31 @@ document
 // DEFAULT LOCATION
 // =========================
 
-searchCity("Syracuse");
+searchCity("Cupertino");
+
+const themeToggle = document.getElementById("themeToggle");
+
+const savedTheme = localStorage.getItem("skyora-theme");
+
+if (savedTheme === "dark") {
+  document.body.classList.add("dark");
+}
+
+themeToggle.addEventListener("click", () => {
+  document.body.classList.add("theme-changing");
+
+  setTimeout(() => {
+    document.body.classList.toggle("dark");
+
+    const isDark = document.body.classList.contains("dark");
+
+    localStorage.setItem(
+      "skyora-theme",
+      isDark ? "dark" : "light"
+    );
+  }, 180);
+
+  setTimeout(() => {
+    document.body.classList.remove("theme-changing");
+  }, 500);
+});
