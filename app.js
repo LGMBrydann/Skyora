@@ -1,3 +1,4 @@
+```js
 const state = {
   unit: "F",
   weather: null,
@@ -44,6 +45,79 @@ function weatherInfo(code) {
 }
 
 // =========================
+// WEATHER BACKGROUND
+// =========================
+
+function setWeatherBackground(code) {
+  const body = document.body;
+
+  body.classList.remove(
+    "weather-clear",
+    "weather-partly-cloudy",
+    "weather-cloudy",
+    "weather-rain",
+    "weather-snow",
+    "weather-storm",
+    "weather-fog"
+  );
+
+  if (code === 0 || code === 1) {
+    body.classList.add("weather-clear");
+  }
+
+  else if (code === 2) {
+    body.classList.add("weather-partly-cloudy");
+  }
+
+  else if (code === 3) {
+    body.classList.add("weather-cloudy");
+  }
+
+  else if (code === 45 || code === 48) {
+    body.classList.add("weather-fog");
+  }
+
+  else if (
+    code >= 51 &&
+    code <= 67
+  ) {
+    body.classList.add("weather-rain");
+  }
+
+  else if (
+    code >= 71 &&
+    code <= 77
+  ) {
+    body.classList.add("weather-snow");
+  }
+
+  else if (
+    code >= 80 &&
+    code <= 82
+  ) {
+    body.classList.add("weather-rain");
+  }
+
+  else if (
+    code >= 85 &&
+    code <= 86
+  ) {
+    body.classList.add("weather-snow");
+  }
+
+  else if (
+    code >= 95 &&
+    code <= 99
+  ) {
+    body.classList.add("weather-storm");
+  }
+
+  else {
+    body.classList.add("weather-clear");
+  }
+}
+
+// =========================
 // TEMPERATURE
 // =========================
 
@@ -72,7 +146,8 @@ function convertWind(kmh) {
 // =========================
 
 function hideAlert() {
-  const alertBox = document.getElementById("alertBox");
+  const alertBox =
+    document.getElementById("alertBox");
 
   if (alertBox) {
     alertBox.hidden = true;
@@ -80,7 +155,8 @@ function hideAlert() {
 }
 
 function getAlertIcon(event) {
-  const name = (event || "").toLowerCase();
+  const name =
+    (event || "").toLowerCase();
 
   if (name.includes("tornado")) {
     return "🌪️";
@@ -131,12 +207,21 @@ function getAlertIcon(event) {
 }
 
 function renderAlert(feature) {
-  const alertBox = document.getElementById("alertBox");
-  const alertIcon = document.getElementById("alertIcon");
-  const alertTitle = document.getElementById("alertTitle");
+  const alertBox =
+    document.getElementById("alertBox");
+
+  const alertIcon =
+    document.getElementById("alertIcon");
+
+  const alertTitle =
+    document.getElementById("alertTitle");
+
   const alertDescription =
     document.getElementById("alertDescription");
-  const alertArea = document.getElementById("alertArea");
+
+  const alertArea =
+    document.getElementById("alertArea");
+
   const alertExpires =
     document.getElementById("alertExpires");
 
@@ -145,7 +230,8 @@ function renderAlert(feature) {
     return;
   }
 
-  const properties = feature.properties || {};
+  const properties =
+    feature.properties || {};
 
   alertTitle.textContent =
     properties.event || "Weather Alert";
@@ -155,13 +241,17 @@ function renderAlert(feature) {
     "A weather alert is active for this area.";
 
   alertArea.textContent =
-    properties.areaDesc || "Your area";
+    properties.areaDesc ||
+    "Your area";
 
   if (properties.expires) {
     alertExpires.textContent =
-      new Date(properties.expires).toLocaleString();
+      new Date(
+        properties.expires
+      ).toLocaleString();
   } else {
-    alertExpires.textContent = "Unknown";
+    alertExpires.textContent =
+      "Unknown";
   }
 
   alertIcon.textContent =
@@ -177,10 +267,13 @@ async function loadAlerts(lat, lon) {
     );
 
     if (!response.ok) {
-      throw new Error("Alert service unavailable");
+      throw new Error(
+        "Alert service unavailable"
+      );
     }
 
-    const data = await response.json();
+    const data =
+      await response.json();
 
     if (
       !data.features ||
@@ -207,45 +300,83 @@ async function loadAlerts(lat, lon) {
 // =========================
 
 function renderCurrent(weather, place) {
-  const current = weather.current;
+  const current =
+    weather.current;
 
   const [
     icon,
     condition
-  ] = weatherInfo(current.weather_code);
+  ] = weatherInfo(
+    current.weather_code
+  );
 
-  document.getElementById("cityName").textContent =
+  // Change the site's atmosphere
+  setWeatherBackground(
+    current.weather_code
+  );
+
+  document.getElementById(
+    "cityName"
+  ).textContent =
     place.name;
 
-  document.getElementById("dateText").textContent =
-    new Date().toLocaleDateString(undefined, {
-      weekday: "long",
-      month: "long",
-      day: "numeric"
-    });
+  document.getElementById(
+    "dateText"
+  ).textContent =
+    new Date().toLocaleDateString(
+      undefined,
+      {
+        weekday: "long",
+        month: "long",
+        day: "numeric"
+      }
+    );
 
-  document.getElementById("weatherIcon").textContent =
+  document.getElementById(
+    "weatherIcon"
+  ).textContent =
     icon;
 
-  document.getElementById("temperature").textContent =
-    convertTemperature(current.temperature_2m);
+  document.getElementById(
+    "temperature"
+  ).textContent =
+    convertTemperature(
+      current.temperature_2m
+    );
 
-  document.getElementById("condition").textContent =
+  document.getElementById(
+    "condition"
+  ).textContent =
     condition;
 
-  document.getElementById("feelsLike").textContent =
-    `${convertTemperature(current.apparent_temperature)}${temperatureUnit()}`;
+  document.getElementById(
+    "feelsLike"
+  ).textContent =
+    `${convertTemperature(
+      current.apparent_temperature
+    )}${temperatureUnit()}`;
 
-  document.getElementById("humidity").textContent =
-    `${Math.round(current.relative_humidity_2m)}%`;
+  document.getElementById(
+    "humidity"
+  ).textContent =
+    `${Math.round(
+      current.relative_humidity_2m
+    )}%`;
 
-  document.getElementById("wind").textContent =
-    convertWind(current.wind_speed_10m);
+  document.getElementById(
+    "wind"
+  ).textContent =
+    convertWind(
+      current.wind_speed_10m
+    );
 
   const rainChance =
-    weather.hourly?.precipitation_probability?.[0];
+    weather.hourly
+      ?.precipitation_probability?.[0];
 
-  document.getElementById("rainChance").textContent =
+  document.getElementById(
+    "rainChance"
+  ).textContent =
     rainChance != null
       ? `${Math.round(rainChance)}%`
       : "--%";
@@ -257,13 +388,18 @@ function renderCurrent(weather, place) {
 
 function renderHourly(weather) {
   const container =
-    document.getElementById("hourlyList");
+    document.getElementById(
+      "hourlyList"
+    );
 
   container.innerHTML = "";
 
-  const times = weather.hourly.time;
+  const times =
+    weather.hourly.time;
+
   const temperatures =
     weather.hourly.temperature_2m;
+
   const codes =
     weather.hourly.weather_code;
 
@@ -271,19 +407,28 @@ function renderHourly(weather) {
 
   let shown = 0;
 
-  for (let i = 0; i < times.length && shown < 12; i++) {
-    const time = new Date(times[i]);
+  for (
+    let i = 0;
+    i < times.length && shown < 12;
+    i++
+  ) {
+    const time =
+      new Date(times[i]);
 
     if (time < now) {
       continue;
     }
 
-    const [icon] = weatherInfo(codes[i]);
+    const [icon] =
+      weatherInfo(codes[i]);
 
     const card =
-      document.createElement("div");
+      document.createElement(
+        "div"
+      );
 
-    card.className = "hourly-card";
+    card.className =
+      "hourly-card";
 
     card.innerHTML = `
       <div class="hourly-time">
@@ -297,7 +442,9 @@ function renderHourly(weather) {
       </div>
 
       <div class="hourly-temp">
-        ${convertTemperature(temperatures[i])}${temperatureUnit()}
+        ${convertTemperature(
+          temperatures[i]
+        )}${temperatureUnit()}
       </div>
     `;
 
@@ -313,18 +460,29 @@ function renderHourly(weather) {
 
 function renderForecast(weather) {
   const container =
-    document.getElementById("forecastList");
+    document.getElementById(
+      "forecastList"
+    );
 
   container.innerHTML = "";
 
-  const daily = weather.daily;
+  const daily =
+    weather.daily;
 
-  for (let i = 0; i < 7; i++) {
+  for (
+    let i = 0;
+    i < 7;
+    i++
+  ) {
     const date =
       new Date(daily.time[i]);
 
-    const [icon, condition] =
-      weatherInfo(daily.weather_code[i]);
+    const [
+      icon,
+      condition
+    ] = weatherInfo(
+      daily.weather_code[i]
+    );
 
     const high =
       convertTemperature(
@@ -337,17 +495,25 @@ function renderForecast(weather) {
       );
 
     const card =
-      document.createElement("div");
+      document.createElement(
+        "div"
+      );
 
-    card.className = "forecast-day";
+    card.className =
+      "forecast-day";
 
     card.innerHTML = `
       <div class="forecast-date">
-        ${i === 0
-          ? "Today"
-          : date.toLocaleDateString(undefined, {
-              weekday: "short"
-            })}
+        ${
+          i === 0
+            ? "Today"
+            : date.toLocaleDateString(
+                undefined,
+                {
+                  weekday: "short"
+                }
+              )
+        }
       </div>
 
       <div class="forecast-condition">
@@ -371,32 +537,51 @@ function renderForecast(weather) {
 // GET WEATHER
 // =========================
 
-async function loadWeather(lat, lon, place) {
+async function loadWeather(
+  lat,
+  lon,
+  place
+) {
   const status =
-    document.getElementById("status");
+    document.getElementById(
+      "status"
+    );
 
   try {
     status.textContent =
       "Loading weather...";
 
-    const params = new URLSearchParams({
-      latitude: lat,
-      longitude: lon,
-      current:
-        "temperature_2m,relative_humidity_2m,apparent_temperature,weather_code,wind_speed_10m",
-      hourly:
-        "temperature_2m,precipitation_probability,weather_code",
-      daily:
-        "weather_code,temperature_2m_max,temperature_2m_min",
-      temperature_unit: "celsius",
-      wind_speed_unit: "kmh",
-      timezone: "auto",
-      forecast_days: "7"
-    });
+    const params =
+      new URLSearchParams({
+        latitude: lat,
+        longitude: lon,
 
-    const response = await fetch(
-      `https://api.open-meteo.com/v1/forecast?${params}`
-    );
+        current:
+          "temperature_2m,relative_humidity_2m,apparent_temperature,weather_code,wind_speed_10m",
+
+        hourly:
+          "temperature_2m,precipitation_probability,weather_code",
+
+        daily:
+          "weather_code,temperature_2m_max,temperature_2m_min",
+
+        temperature_unit:
+          "celsius",
+
+        wind_speed_unit:
+          "kmh",
+
+        timezone:
+          "auto",
+
+        forecast_days:
+          "7"
+      });
+
+    const response =
+      await fetch(
+        `https://api.open-meteo.com/v1/forecast?${params}`
+      );
 
     if (!response.ok) {
       throw new Error(
@@ -407,17 +592,32 @@ async function loadWeather(lat, lon, place) {
     const weather =
       await response.json();
 
-    state.weather = weather;
-    state.place = place;
+    state.weather =
+      weather;
 
-    renderCurrent(weather, place);
-    renderHourly(weather);
-    renderForecast(weather);
+    state.place =
+      place;
 
-    // Load NWS alerts for this location
-    await loadAlerts(lat, lon);
+    renderCurrent(
+      weather,
+      place
+    );
 
-    status.textContent = "";
+    renderHourly(
+      weather
+    );
+
+    renderForecast(
+      weather
+    );
+
+    await loadAlerts(
+      lat,
+      lon
+    );
+
+    status.textContent =
+      "";
 
   } catch (error) {
     console.error(
@@ -436,22 +636,26 @@ async function loadWeather(lat, lon, place) {
 
 async function searchCity(city) {
   const status =
-    document.getElementById("status");
+    document.getElementById(
+      "status"
+    );
 
   try {
     status.textContent =
       "Finding location...";
 
-    const params = new URLSearchParams({
-      name: city,
-      count: "1",
-      language: "en",
-      format: "json"
-    });
+    const params =
+      new URLSearchParams({
+        name: city,
+        count: "1",
+        language: "en",
+        format: "json"
+      });
 
-    const response = await fetch(
-      `https://geocoding-api.open-meteo.com/v1/search?${params}`
-    );
+    const response =
+      await fetch(
+        `https://geocoding-api.open-meteo.com/v1/search?${params}`
+      );
 
     if (!response.ok) {
       throw new Error(
@@ -472,7 +676,8 @@ async function searchCity(city) {
       return;
     }
 
-    const place = data.results[0];
+    const place =
+      data.results[0];
 
     await loadWeather(
       place.latitude,
@@ -497,21 +702,26 @@ async function searchCity(city) {
 
 document
   .getElementById("searchForm")
-  .addEventListener("submit", async (event) => {
-    event.preventDefault();
+  .addEventListener(
+    "submit",
+    async (event) => {
+      event.preventDefault();
 
-    const input =
-      document.getElementById("cityInput");
+      const input =
+        document.getElementById(
+          "cityInput"
+        );
 
-    const city =
-      input.value.trim();
+      const city =
+        input.value.trim();
 
-    if (!city) {
-      return;
+      if (!city) {
+        return;
+      }
+
+      await searchCity(city);
     }
-
-    await searchCity(city);
-  });
+  );
 
 // =========================
 // UNIT TOGGLE
@@ -519,146 +729,112 @@ document
 
 document
   .getElementById("unitToggle")
-  .addEventListener("click", () => {
-    state.unit =
-      state.unit === "F"
-        ? "C"
-        : "F";
+  .addEventListener(
+    "click",
+    () => {
+      state.unit =
+        state.unit === "F"
+          ? "C"
+          : "F";
 
-    document.getElementById(
-      "unitToggle"
-    ).textContent =
-      state.unit === "F"
-        ? "°F"
-        : "°C";
+      document.getElementById(
+        "unitToggle"
+      ).textContent =
+        state.unit === "F"
+          ? "°F"
+          : "°C";
 
-    if (state.weather && state.place) {
-      renderCurrent(
-        state.weather,
+      if (
+        state.weather &&
         state.place
-      );
+      ) {
+        renderCurrent(
+          state.weather,
+          state.place
+        );
 
-      renderHourly(
-        state.weather
-      );
+        renderHourly(
+          state.weather
+        );
 
-      renderForecast(
-        state.weather
-      );
+        renderForecast(
+          state.weather
+        );
+      }
     }
-  });
+  );
 
 // =========================
 // DISMISS ALERT
 // =========================
 
 document
-  .getElementById("dismissAlert")
+  .getElementById(
+    "dismissAlert"
+  )
   .addEventListener(
     "click",
     hideAlert
   );
 
 // =========================
+// THEME TOGGLE
+// =========================
+
+const themeToggle =
+  document.getElementById(
+    "themeToggle"
+  );
+
+const savedTheme =
+  localStorage.getItem(
+    "skyora-theme"
+  );
+
+if (
+  savedTheme === "dark"
+) {
+  document.body.classList.add(
+    "dark"
+  );
+}
+
+themeToggle.addEventListener(
+  "click",
+  () => {
+    document.body.classList.add(
+      "theme-changing"
+    );
+
+    setTimeout(() => {
+      document.body.classList.toggle(
+        "dark"
+      );
+
+      const isDark =
+        document.body.classList.contains(
+          "dark"
+        );
+
+      localStorage.setItem(
+        "skyora-theme",
+        isDark
+          ? "dark"
+          : "light"
+      );
+    }, 180);
+
+    setTimeout(() => {
+      document.body.classList.remove(
+        "theme-changing"
+      );
+    }, 500);
+  }
+);
+
+// =========================
 // DEFAULT LOCATION
 // =========================
 
 searchCity("Cupertino");
-
-const themeToggle = document.getElementById("themeToggle");
-
-const savedTheme = localStorage.getItem("skyora-theme");
-
-if (savedTheme === "dark") {
-  document.body.classList.add("dark");
-}
-
-themeToggle.addEventListener("click", () => {
-  document.body.classList.add("theme-changing");
-
-  setTimeout(() => {
-    document.body.classList.toggle("dark");
-
-    const isDark = document.body.classList.contains("dark");
-
-    localStorage.setItem(
-      "skyora-theme",
-      isDark ? "dark" : "light"
-    );
-  }, 180);
-
-  setTimeout(() => {
-    document.body.classList.remove("theme-changing");
-  }, 500);
-
-  /* =========================
-   SKYORA WEATHER BACKGROUND
-========================= */
-
-function setWeatherBackground(condition) {
-  const body = document.body;
-
-  // Remove previous weather classes
-  body.classList.remove(
-    "weather-clear",
-    "weather-partly-cloudy",
-    "weather-cloudy",
-    "weather-rain",
-    "weather-snow",
-    "weather-storm",
-    "weather-fog"
-  );
-
-  const weather = String(condition).toLowerCase();
-
-  if (
-    weather.includes("thunder") ||
-    weather.includes("storm")
-  ) {
-    body.classList.add("weather-storm");
-  }
-
-  else if (
-    weather.includes("snow") ||
-    weather.includes("sleet") ||
-    weather.includes("ice")
-  ) {
-    body.classList.add("weather-snow");
-  }
-
-  else if (
-    weather.includes("rain") ||
-    weather.includes("shower") ||
-    weather.includes("drizzle")
-  ) {
-    body.classList.add("weather-rain");
-  }
-
-  else if (
-    weather.includes("fog") ||
-    weather.includes("mist") ||
-    weather.includes("haze")
-  ) {
-    body.classList.add("weather-fog");
-  }
-
-  else if (
-    weather.includes("partly") ||
-    weather.includes("mostly sunny") ||
-    weather.includes("mostly clear")
-  ) {
-    body.classList.add("weather-partly-cloudy");
-  }
-
-  else if (
-    weather.includes("cloud") ||
-    weather.includes("overcast")
-  ) {
-    body.classList.add("weather-cloudy");
-  }
-
-  else {
-    body.classList.add("weather-clear");
-  }
-}
-});
+```
