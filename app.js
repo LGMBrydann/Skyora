@@ -18,14 +18,6 @@ function enableAlertSound() {
     return;
   }
 
-  /*
-   * Mobile browsers require audio playback
-   * to begin from a user interaction.
-   *
-   * We use the actual alert sound here,
-   * then immediately pause it after playback
-   * successfully starts.
-   */
   alertSound.volume = 0.01;
   alertSound.currentTime = 0;
 
@@ -66,10 +58,6 @@ function playAlertSound() {
     return;
   }
 
-  /*
-   * If the browser has not allowed audio yet,
-   * don't try to force playback.
-   */
   if (!state.soundEnabled) {
     return;
   }
@@ -99,25 +87,10 @@ function setupAlertSound() {
       "skyora-sound-enabled"
     );
 
-  /*
-   * If this browser has previously unlocked
-   * Skyora audio, remember that state.
-   */
   if (saved === "true") {
     state.soundEnabled = true;
   }
 
-  /*
-   * Any normal interaction with Skyora can
-   * unlock audio.
-   *
-   * This includes tapping:
-   * - Search
-   * - °F / °C
-   * - Dark mode
-   * - Acknowledge
-   * - The page itself
-   */
   function unlockSound() {
     if (state.soundEnabled) {
       document.removeEventListener(
@@ -130,10 +103,6 @@ function setupAlertSound() {
 
     enableAlertSound();
 
-    /*
-     * We intentionally leave this listener
-     * attached until playback actually succeeds.
-     */
     if (state.soundEnabled) {
       document.removeEventListener(
         "pointerdown",
@@ -478,12 +447,6 @@ async function loadAlerts(lat, lon) {
 
     renderAlert(feature);
 
-    /*
-     * Existing alerts do not make noise.
-     *
-     * A sound is played only when the alert
-     * changes while Skyora is already running.
-     */
     if (
       isNewAlert &&
       !firstAlertLoad
@@ -534,6 +497,47 @@ function renderCurrent(
     "cityName"
   ).textContent =
     place.name;
+
+  // =========================
+  // LOCATION SUBTITLE
+  // =========================
+
+  const locationSubtitle =
+    document.getElementById(
+      "locationSubtitle"
+    );
+
+  const stateName =
+    place.admin1 ||
+    "";
+
+  const countryName =
+    place.country ||
+    "";
+
+  const locationParts =
+    [];
+
+  if (stateName) {
+    locationParts.push(
+      stateName
+    );
+  }
+
+  if (countryName) {
+    locationParts.push(
+      countryName
+    );
+  }
+
+  locationSubtitle.textContent =
+    locationParts.length > 0
+      ? locationParts.join(", ")
+      : "Location unavailable";
+
+  // =========================
+  // DATE
+  // =========================
 
   document.getElementById(
     "dateText"
@@ -1161,21 +1165,12 @@ setupAlertSound();
 // ALERT POLLING
 // =========================
 
-/*
- * Check for new NWS alerts every minute
- * while Skyora is open.
- */
 setInterval(
   function () {
     if (
       state.place &&
       state.weather
     ) {
-      /*
-       * Open-Meteo's weather object contains
-       * the coordinates used for the current
-       * forecast.
-       */
       const latitude =
         state.weather.latitude;
 
