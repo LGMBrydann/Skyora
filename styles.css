@@ -731,4 +731,47 @@ body.dark .theme-toggle:active::before {
   display: flex;
   align-items: center;
   gap: 8px;
+  body.weather-clear {
+  background: linear-gradient(
+    180deg,
+    #4fa3e3 0%,
+    #b9e4f7 100%
+  );
+}
+
+body.weather-cloudy {
+  background: linear-gradient(
+    180deg,
+    #657786 0%,
+    #b6c3cc 100%
+  );
+}
+
+body.weather-rain {
+  background: linear-gradient(
+    180deg,
+    #243b55 0%,
+    #506a80 100%
+  );
+}
+
+body.weather-snow {
+  background: linear-gradient(
+    180deg,
+    #8fa9bd 0%,
+    #e3edf2 100%
+  );
+}
+
+body.weather-storm {
+  background: linear-gradient(
+    180deg,
+    #17202a 0%,
+    #34495e 100%
+  );
+}
+
+body {
+  transition: background 1.2s ease;
+}
 }
