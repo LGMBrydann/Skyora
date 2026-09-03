@@ -774,4 +774,11 @@ body.weather-storm {
 body {
   transition: background 1.2s ease;
 }
+  .weather-effects {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+  z-index: -1;
+}
 }
