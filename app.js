@@ -590,4 +590,75 @@ themeToggle.addEventListener("click", () => {
   setTimeout(() => {
     document.body.classList.remove("theme-changing");
   }, 500);
+
+  /* =========================
+   SKYORA WEATHER BACKGROUND
+========================= */
+
+function setWeatherBackground(condition) {
+  const body = document.body;
+
+  // Remove previous weather classes
+  body.classList.remove(
+    "weather-clear",
+    "weather-partly-cloudy",
+    "weather-cloudy",
+    "weather-rain",
+    "weather-snow",
+    "weather-storm",
+    "weather-fog"
+  );
+
+  const weather = String(condition).toLowerCase();
+
+  if (
+    weather.includes("thunder") ||
+    weather.includes("storm")
+  ) {
+    body.classList.add("weather-storm");
+  }
+
+  else if (
+    weather.includes("snow") ||
+    weather.includes("sleet") ||
+    weather.includes("ice")
+  ) {
+    body.classList.add("weather-snow");
+  }
+
+  else if (
+    weather.includes("rain") ||
+    weather.includes("shower") ||
+    weather.includes("drizzle")
+  ) {
+    body.classList.add("weather-rain");
+  }
+
+  else if (
+    weather.includes("fog") ||
+    weather.includes("mist") ||
+    weather.includes("haze")
+  ) {
+    body.classList.add("weather-fog");
+  }
+
+  else if (
+    weather.includes("partly") ||
+    weather.includes("mostly sunny") ||
+    weather.includes("mostly clear")
+  ) {
+    body.classList.add("weather-partly-cloudy");
+  }
+
+  else if (
+    weather.includes("cloud") ||
+    weather.includes("overcast")
+  ) {
+    body.classList.add("weather-cloudy");
+  }
+
+  else {
+    body.classList.add("weather-clear");
+  }
+}
 });
