@@ -5,12 +5,16 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   <title>Skyora</title>
+
   <meta
     name="description"
     content="Skyora — simple, beautiful weather forecasts and alerts."
   >
 
-  <meta name="theme-color" content="#172554">
+  <meta
+    name="theme-color"
+    content="#172554"
+  >
 
   <link rel="stylesheet" href="styles.css">
 </head>
@@ -19,23 +23,51 @@
 
   <main class="app">
 
-    <!-- Header -->
+    <!-- =========================
+         HEADER
+    ========================== -->
+
     <header class="header">
+
       <div>
         <p class="eyebrow">SKYORA</p>
         <h1>Weather</h1>
       </div>
 
-      <button id="unitToggle" class="unit-button" type="button">
-        °F
-      <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode"></button>
-      </button>
+      <div class="header-actions">
+
+        <!-- Temperature Unit -->
+        <button
+          id="unitToggle"
+          class="unit-button"
+          type="button"
+          aria-label="Change temperature unit"
+        >
+          °F
+        </button>
+
+        <!-- Dark Mode -->
+        <button
+          id="themeToggle"
+          class="theme-toggle"
+          type="button"
+          aria-label="Toggle dark mode"
+          title="Toggle dark mode"
+        ></button>
+
+      </div>
+
     </header>
 
 
-    <!-- Search -->
+    <!-- =========================
+         SEARCH
+    ========================== -->
+
     <section class="search-section">
+
       <form id="searchForm">
+
         <input
           id="cityInput"
           type="search"
@@ -47,32 +79,59 @@
         <button type="submit">
           Search
         </button>
+
       </form>
 
-      <p id="status" class="status"></p>
+      <p
+        id="status"
+        class="status"
+        aria-live="polite"
+      ></p>
+
     </section>
 
 
-    <!-- Skyora Alerts -->
+    <!-- =========================
+         SKYORA ALERTS
+    ========================== -->
+
     <section
       id="alertBox"
       class="alert-box"
       hidden
       aria-live="assertive"
     >
+
       <div class="alert-header">
-        <div class="alert-icon" id="alertIcon">⚠️</div>
+
+        <div
+          class="alert-icon"
+          id="alertIcon"
+        >
+          ⚠️
+        </div>
 
         <div class="alert-heading">
-          <p class="alert-label">SKYORA ALERT</p>
-          <h2 id="alertTitle">Weather Alert</h2>
+
+          <p class="alert-label">
+            SKYORA ALERT
+          </p>
+
+          <h2 id="alertTitle">
+            Weather Alert
+          </h2>
+
         </div>
+
       </div>
 
+
       <div class="alert-content">
+
         <p id="alertDescription"></p>
 
         <div class="alert-details">
+
           <p>
             <strong>Area:</strong>
             <span id="alertArea">—</span>
@@ -82,8 +141,11 @@
             <strong>Expires:</strong>
             <span id="alertExpires">—</span>
           </p>
+
         </div>
+
       </div>
+
 
       <button
         id="dismissAlert"
@@ -92,20 +154,36 @@
       >
         Acknowledge
       </button>
+
     </section>
 
 
-    <!-- Current Weather -->
+    <!-- =========================
+         CURRENT WEATHER
+    ========================== -->
+
     <section class="current-card">
 
       <div class="location">
-        <h2 id="cityName">Syracuse</h2>
-        <p id="dateText">Loading...</p>
+
+        <h2 id="cityName">
+          Syracuse
+        </h2>
+
+        <p id="dateText">
+          Loading...
+        </p>
+
       </div>
+
 
       <div class="current-weather">
 
-        <div class="weather-icon" id="weatherIcon">
+        <div
+          class="weather-icon"
+          id="weatherIcon"
+          aria-hidden="true"
+        >
           ☁️
         </div>
 
@@ -113,11 +191,15 @@
           <span id="temperature">--</span>°
         </div>
 
-        <div class="condition" id="condition">
+        <div
+          class="condition"
+          id="condition"
+        >
           Loading...
         </div>
 
       </div>
+
 
       <div class="weather-details">
 
@@ -146,7 +228,10 @@
     </section>
 
 
-    <!-- Hourly Forecast -->
+    <!-- =========================
+         HOURLY FORECAST
+    ========================== -->
+
     <section class="forecast-section">
 
       <div class="section-heading">
@@ -161,7 +246,10 @@
     </section>
 
 
-    <!-- 7 Day Forecast -->
+    <!-- =========================
+         7-DAY FORECAST
+    ========================== -->
+
     <section class="forecast-section">
 
       <div class="section-heading">
@@ -176,10 +264,15 @@
     </section>
 
 
-    <!-- Footer -->
+    <!-- =========================
+         FOOTER
+    ========================== -->
+
     <footer>
+
       <p>
         Weather data from
+
         <a
           href="https://open-meteo.com/"
           target="_blank"
@@ -187,7 +280,9 @@
         >
           Open-Meteo
         </a>
+
         and
+
         <a
           href="https://www.weather.gov/"
           target="_blank"
@@ -200,9 +295,11 @@
       <p class="footer-brand">
         Skyora ☁️
       </p>
+
     </footer>
 
   </main>
+
 
   <script src="app.js"></script>
 
