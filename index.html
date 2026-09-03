@@ -2,7 +2,11 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0, viewport-fit=cover"
+  >
 
   <title>Skyora</title>
 
@@ -16,7 +20,50 @@
     content="#172554"
   >
 
-  <link rel="stylesheet" href="styles.css">
+  <!-- Android / PWA -->
+  <meta
+    name="mobile-web-app-capable"
+    content="yes"
+  >
+
+  <meta
+    name="apple-mobile-web-app-capable"
+    content="yes"
+  >
+
+  <meta
+    name="apple-mobile-web-app-status-bar-style"
+    content="default"
+  >
+
+  <meta
+    name="apple-mobile-web-app-title"
+    content="Skyora"
+  >
+
+  <!-- PWA Manifest -->
+  <link
+    rel="manifest"
+    href="manifest.json"
+  >
+
+  <!-- App Icons -->
+  <link
+    rel="icon"
+    type="image/png"
+    href="skyora-icon.png"
+  >
+
+  <link
+    rel="apple-touch-icon"
+    href="skyora-icon.png"
+  >
+
+  <!-- Skyora Styles -->
+  <link
+    rel="stylesheet"
+    href="styles.css"
+  >
 </head>
 
 <body>
@@ -301,7 +348,44 @@
   </main>
 
 
+  <!-- =========================
+       SKYORA ALERT SOUND
+  ========================== -->
+
+  <audio
+    id="alertSound"
+    src="skyora-noti.mp3"
+    preload="auto"
+  ></audio>
+
+
+  <!-- =========================
+       SKYORA APP
+  ========================== -->
+
   <script src="app.js"></script>
+
+
+  <!-- =========================
+       PWA SERVICE WORKER
+  ========================== -->
+
+  <script>
+    if ("serviceWorker" in navigator) {
+      window.addEventListener("load", function () {
+        navigator.serviceWorker.register("service-worker.js")
+          .then(function () {
+            console.log("Skyora service worker registered.");
+          })
+          .catch(function (error) {
+            console.error(
+              "Skyora service worker registration failed:",
+              error
+            );
+          });
+      });
+    }
+  </script>
 
 </body>
 </html>
