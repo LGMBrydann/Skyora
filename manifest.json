@@ -1,0 +1,19 @@
+{
+  "name": "Skyora Weather",
+  "short_name": "Skyora",
+  "description": "A simple, modern weather app with weather alerts.",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#eef2f6",
+  "theme_color": "#172554",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "skyora-icon.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
