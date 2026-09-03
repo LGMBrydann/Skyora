@@ -18,7 +18,16 @@ function enableAlertSound() {
     return;
   }
 
+  /*
+   * Mobile browsers require audio playback
+   * to begin from a user interaction.
+   *
+   * We use the actual alert sound here,
+   * then immediately pause it after playback
+   * successfully starts.
+   */
   alertSound.volume = 0.01;
+  alertSound.currentTime = 0;
 
   const playPromise =
     alertSound.play();
@@ -36,8 +45,14 @@ function enableAlertSound() {
           "skyora-sound-enabled",
           "true"
         );
+
+        console.log(
+          "Skyora alert sounds enabled."
+        );
       })
       .catch(function (error) {
+        state.soundEnabled = false;
+
         console.log(
           "Skyora alert sound could not be enabled:",
           error
@@ -47,13 +62,19 @@ function enableAlertSound() {
 }
 
 function playAlertSound() {
-  if (
-    !alertSound ||
-    !state.soundEnabled
-  ) {
+  if (!alertSound) {
     return;
   }
 
+  /*
+   * If the browser has not allowed audio yet,
+   * don't try to force playback.
+   */
+  if (!state.soundEnabled) {
+    return;
+  }
+
+  alertSound.pause();
   alertSound.currentTime = 0;
   alertSound.volume = 1;
 
@@ -66,6 +87,8 @@ function playAlertSound() {
         "Skyora alert sound could not play:",
         error
       );
+
+      state.soundEnabled = false;
     });
   }
 }
@@ -76,40 +99,54 @@ function setupAlertSound() {
       "skyora-sound-enabled"
     );
 
+  /*
+   * If this browser has previously unlocked
+   * Skyora audio, remember that state.
+   */
   if (saved === "true") {
     state.soundEnabled = true;
   }
 
   /*
-   * Mobile browsers generally require a
-   * user interaction before allowing audio.
+   * Any normal interaction with Skyora can
+   * unlock audio.
    *
-   * The first tap/click on Skyora attempts
-   * to unlock the alert sound.
+   * This includes tapping:
+   * - Search
+   * - °F / °C
+   * - Dark mode
+   * - Acknowledge
+   * - The page itself
    */
+  function unlockSound() {
+    if (state.soundEnabled) {
+      document.removeEventListener(
+        "pointerdown",
+        unlockSound
+      );
+
+      return;
+    }
+
+    enableAlertSound();
+
+    /*
+     * We intentionally leave this listener
+     * attached until playback actually succeeds.
+     */
+    if (state.soundEnabled) {
+      document.removeEventListener(
+        "pointerdown",
+        unlockSound
+      );
+    }
+  }
+
   document.addEventListener(
-    "click",
-    function unlockSound() {
-      if (state.soundEnabled) {
-        document.removeEventListener(
-          "click",
-          unlockSound
-        );
-
-        return;
-      }
-
-      enableAlertSound();
-
-      if (state.soundEnabled) {
-        document.removeEventListener(
-          "click",
-          unlockSound
-        );
-      }
-    },
+    "pointerdown",
+    unlockSound,
     {
-      once: false
+      passive: true
     }
   );
 }
@@ -242,8 +279,10 @@ function getAlertIcon(event) {
     return "⛈️";
   }
 
-  if (name.includes("hurricane") ||
-      name.includes("tropical")) {
+  if (
+    name.includes("hurricane") ||
+    name.includes("tropical")
+  ) {
     return "🌀";
   }
 
@@ -375,12 +414,6 @@ function getAlertId(feature) {
   const properties =
     feature.properties || {};
 
-  /*
-   * NWS GeoJSON features normally have
-   * a unique ID. The fallback combines
-   * several fields so an alert can still
-   * be identified if the ID is missing.
-   */
   return (
     feature.id ||
     properties.id ||
@@ -406,7 +439,9 @@ async function loadAlerts(lat, lon) {
       encodeURIComponent(lon);
 
     const response =
-      await fetch(url);
+      await fetch(url, {
+        cache: "no-store"
+      });
 
     if (!response.ok) {
       throw new Error(
@@ -444,11 +479,10 @@ async function loadAlerts(lat, lon) {
     renderAlert(feature);
 
     /*
-     * Do not blast the sound simply because
-     * Skyora loaded an existing alert.
+     * Existing alerts do not make noise.
      *
-     * Sound only happens when an alert
-     * changes while Skyora is already open.
+     * A sound is played only when the alert
+     * changes while Skyora is already running.
      */
     if (
       isNewAlert &&
@@ -961,11 +995,8 @@ async function searchCity(city) {
     const place =
       data.results[0];
 
-    /*
-     * A new location should not inherit
-     * the previous location's alert ID.
-     */
-    state.lastAlertId = null;
+    state.lastAlertId =
+      null;
 
     await loadWeather(
       place.latitude,
@@ -1125,6 +1156,45 @@ themeToggle.addEventListener(
 // =========================
 
 setupAlertSound();
+
+// =========================
+// ALERT POLLING
+// =========================
+
+/*
+ * Check for new NWS alerts every minute
+ * while Skyora is open.
+ */
+setInterval(
+  function () {
+    if (
+      state.place &&
+      state.weather
+    ) {
+      /*
+       * Open-Meteo's weather object contains
+       * the coordinates used for the current
+       * forecast.
+       */
+      const latitude =
+        state.weather.latitude;
+
+      const longitude =
+        state.weather.longitude;
+
+      if (
+        latitude !== undefined &&
+        longitude !== undefined
+      ) {
+        loadAlerts(
+          latitude,
+          longitude
+        );
+      }
+    }
+  },
+  60 * 1000
+);
 
 // =========================
 // DEFAULT LOCATION
