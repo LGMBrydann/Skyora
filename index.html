@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Skyora</title>
+  <meta
+    name="description"
+    content="Skyora — simple, beautiful weather forecasts and alerts."
+  >
+
+  <meta name="theme-color" content="#172554">
+
+  <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+
+  <main class="app">
+
+    <!-- Header -->
+    <header class="header">
+      <div>
+        <p class="eyebrow">SKYORA</p>
+        <h1>Weather</h1>
+      </div>
+
+      <button id="unitToggle" class="unit-button" type="button">
+        °F
+      </button>
+    </header>
+
+
+    <!-- Search -->
+    <section class="search-section">
+      <form id="searchForm">
+        <input
+          id="cityInput"
+          type="search"
+          placeholder="Search for a city..."
+          autocomplete="off"
+          aria-label="Search for a city"
+        >
+
+        <button type="submit">
+          Search
+        </button>
+      </form>
+
+      <p id="status" class="status"></p>
+    </section>
+
+
+    <!-- Skyora Alerts -->
+    <section
+      id="alertBox"
+      class="alert-box"
+      hidden
+      aria-live="assertive"
+    >
+      <div class="alert-header">
+        <div class="alert-icon" id="alertIcon">⚠️</div>
+
+        <div class="alert-heading">
+          <p class="alert-label">SKYORA ALERT</p>
+          <h2 id="alertTitle">Weather Alert</h2>
+        </div>
+      </div>
+
+      <div class="alert-content">
+        <p id="alertDescription"></p>
+
+        <div class="alert-details">
+          <p>
+            <strong>Area:</strong>
+            <span id="alertArea">—</span>
+          </p>
+
+          <p>
+            <strong>Expires:</strong>
+            <span id="alertExpires">—</span>
+          </p>
+        </div>
+      </div>
+
+      <button
+        id="dismissAlert"
+        class="dismiss-alert"
+        type="button"
+      >
+        Acknowledge
+      </button>
+    </section>
+
+
+    <!-- Current Weather -->
+    <section class="current-card">
+
+      <div class="location">
+        <h2 id="cityName">Syracuse</h2>
+        <p id="dateText">Loading...</p>
+      </div>
+
+      <div class="current-weather">
+
+        <div class="weather-icon" id="weatherIcon">
+          ☁️
+        </div>
+
+        <div class="temperature">
+          <span id="temperature">--</span>°
+        </div>
+
+        <div class="condition" id="condition">
+          Loading...
+        </div>
+
+      </div>
+
+      <div class="weather-details">
+
+        <div class="detail">
+          <span>Feels like</span>
+          <strong id="feelsLike">--°</strong>
+        </div>
+
+        <div class="detail">
+          <span>Humidity</span>
+          <strong id="humidity">--%</strong>
+        </div>
+
+        <div class="detail">
+          <span>Wind</span>
+          <strong id="wind">--</strong>
+        </div>
+
+        <div class="detail">
+          <span>Rain chance</span>
+          <strong id="rainChance">--%</strong>
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- Hourly Forecast -->
+    <section class="forecast-section">
+
+      <div class="section-heading">
+        <h2>Hourly</h2>
+      </div>
+
+      <div
+        id="hourlyList"
+        class="hourly-list"
+      ></div>
+
+    </section>
+
+
+    <!-- 7 Day Forecast -->
+    <section class="forecast-section">
+
+      <div class="section-heading">
+        <h2>7-Day Forecast</h2>
+      </div>
+
+      <div
+        id="forecastList"
+        class="forecast-list"
+      ></div>
+
+    </section>
+
+
+    <!-- Footer -->
+    <footer>
+      <p>
+        Weather data from
+        <a
+          href="https://open-meteo.com/"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Open-Meteo
+        </a>
+        and
+        <a
+          href="https://www.weather.gov/"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          NWS
+        </a>
+      </p>
+
+      <p class="footer-brand">
+        Skyora ☁️
+      </p>
+    </footer>
+
+  </main>
+
+  <script src="app.js"></script>
+
+</body>
+</html>
